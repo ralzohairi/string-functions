@@ -1,7 +1,6 @@
 # String Functions
 
-This project provides TypeScript functions for handling and manipluting string in an Angular Project.
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.2.
+This project provides TypeScript functions for handling and manipluting string in an Angular project and it was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.2.
 
 ## Development server
 
