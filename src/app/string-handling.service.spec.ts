@@ -47,7 +47,7 @@ describe('StringHandlingService', () => {
 
   // ----------- escapeRegExp() Unit Tests -----------
   it('should escape the regular expression \'.*+?^${}()\\ \\\\ \' and return \'\\.\\*\\+\\?\\^\\$\\{\\}\\(\\)\\\\ \\\\\\\\\'', () => {
-    expect(stringHandlingService.escapeRegExp('.*+?^${}()\\ \\\\ \'')).toEqual('\\.\\*\\+\\?\\^\\$\\{\\}\\(\\)\\\\ \\\\\\\\ \'');
+    expect(stringHandlingService.escapeSpecialCharactersOfRegExpInAString('.*+?^${}()\\ \\\\ \'')).toEqual('\\.\\*\\+\\?\\^\\$\\{\\}\\(\\)\\\\ \\\\\\\\ \'');
   });
 
   // ----------- includes() Unit Tests -----------
@@ -77,14 +77,26 @@ describe('StringHandlingService', () => {
 
   // ----------- escapeNonEscapedSymbols() Unit Tests -----------
 
-  it("should return '\"The ocean's blue < & > \"' when passing '&quot; The ocean&apos;s blue &lt; &amp; &gt; &quot;'", () => {
-    expect(stringHandlingService.escapeNonEscapedSymbols("&quot; The ocean&apos;s blue &lt; &amp; &gt; &quot;")).toBe("\" The ocean's blue < & > \"");
+  it("should return \"The ocean's blue < & > \" when passing '&quot; The ocean&apos;s blue &lt; &amp; &gt; &quot;'", () => {
+    expect(stringHandlingService.replaceEscapedXMLCharactersWithNonEscapedCharacters("&quot; The ocean&apos;s blue &lt; &amp; &gt; &quot;")).toBe("\" The ocean's blue < & > \"");
+  });
+
+  it("should return the same string if a string of whitespace only is passed to replaceEscapedXMLCharactersWithNonEscapedCharacters()", () => {
+    expect(stringHandlingService.replaceEscapedXMLCharactersWithNonEscapedCharacters("      ")).toBe("      ");
   });
 
   // ----------- removeFileNameExtension() Unit Tests -----------
 
   it("should return '\"file.name-file.name\"' when passing '\"file.name-file.name.png\"' to the removeFileNameExtension from filename", () => {
     expect(stringHandlingService.removeFileNameExtension("file.name-file.name.png")).toBe("file.name-file.name");
+  });
+
+  it("should return the passed string when passing a filename without extension to the removeFileNameExtension from filename", () => {
+    expect(stringHandlingService.removeFileNameExtension("filename-filename")).toBe("filename-filename");
+  });
+
+  it("should return an empty string when passing a white space string the removeFileNameExtension from filename", () => {
+    expect(stringHandlingService.removeFileNameExtension("    ")).toBe("");
   });
 
   // ----------- isPrefix() Unit Tests -----------
@@ -140,6 +152,10 @@ describe('StringHandlingService', () => {
     expect(stringHandlingService.extractPathFromURL("hostname.com:portname")).toBe("");
   });
 
+  it("should return an empty string when passing a string of whitespace to the extractPathFromURL function", () => {
+    expect(stringHandlingService.extractPathFromURL("    ")).toBe("");
+  });
+
   // ----------- getHttpsVersionOfURL() Unit Tests -----------
   it("should return 'http://github.com/' when passing 'https://github.com/' to the getHttpsVersionOfURL function", () => {
     expect(stringHandlingService.getHttpsVersionOfURL("http://github.com/")).toBe("https://github.com/");
@@ -147,6 +163,14 @@ describe('StringHandlingService', () => {
 
   it("should return 'https://github.com/' when passing 'https://github.com/' to the getHttpsVersionOfURL function", () => {
     expect(stringHandlingService.getHttpsVersionOfURL("https://github.com/")).toBe("https://github.com/");
+  });
+
+  it("should return 'github.com/' when passing 'github.com/' to the getHttpsVersionOfURL function (no protocol case)", () => {
+    expect(stringHandlingService.getHttpsVersionOfURL("github.com/")).toBe("github.com/");
+  });
+
+  it("should return an empty string when passing only whitespace to the getHttpsVersionOfURL function", () => {
+    expect(stringHandlingService.getHttpsVersionOfURL("     ")).toBe("");
   });
 
 });
