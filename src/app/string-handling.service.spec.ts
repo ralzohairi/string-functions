@@ -219,7 +219,7 @@ describe('StringHandlingService', () => {
   });
 
   // ----------- getHttpsVersionOfURL() Unit Tests -----------
-  it("should return 'http://github.com/' when passing 'https://github.com/' to the getHttpsVersionOfURL function", () => {
+  it("should return 'https://github.com/' when passing 'http://github.com/' to the getHttpsVersionOfURL function", () => {
     expect(stringHandlingService.getHttpsVersionOfURL("http://github.com/")).toBe("https://github.com/");
   });
 
