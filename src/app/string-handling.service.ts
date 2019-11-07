@@ -1,20 +1,20 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root"
 })
 export class StringHandlingService {
 
   constructor() { }
 
-  /** Determines if string contains white space only
+  /** Determines if passed string contains white space only
    * @param {String} text - string to test
-   * @returns {Boolean} true if passed string contains white space only, returns false otherwise
+   * @returns {Boolean} true if passed string contains white space only and false otherwise
    */
   isWhiteSpaceOnly(text: string): boolean {
 
-    const noWhiteSpaceInput = text.replace(/\s/g, ""); // replace all white space with empty string
-    // Note: g is for global match (to not stop at first match)
+    // Replace all existing white space in string with an empty string
+    const noWhiteSpaceInput = text.replace(/\s/g, ""); // Note: g is for global match (to not stop at first match)
 
     if (noWhiteSpaceInput === "") {
       return true;
@@ -23,15 +23,33 @@ export class StringHandlingService {
     }
   }
 
+  /** Determines if the first passed string contains the second passed string as a prefix
+   * @param {String} text - the string to check it's prefix
+   * @param {String} possiblePrefix - the possible prefix of text
+   * @returns {Boolean} true if the first passed string contains the second passed
+   * string as a prefix and false otherwise.
+   */
+  isPrefix(text: string, possiblePrefix: string): boolean {
+    // If the text is shorte, in length, than the passed possible prefix
+    if (text.length < possiblePrefix.length) {
+      return false;
+    }
+
+    // Otherwise, test if it contains the possible prefix
+    return text.indexOf(possiblePrefix) !== -1 && text.substring(0, possiblePrefix.length) === possiblePrefix;
+
+    // Note using the built in function includes as it's not supported in IE.
+  }
+
   /** Returns the first word of a string
    * @param {String} text - string to test
-   * @returns {String} the first word of the string, if string is not white space
+   * @returns {String} the first word of the passed string, if string is not white space
    *  only. Otherwise, returns an empty string.
    */
   getFirstWord(text: string): string {
 
     if (!this.isWhiteSpaceOnly(text)) {
-      // create a list of all words in text where the white space is ignored
+      // create a list of all words in text using any white space as a breaking point
       const stringBrokenIntoArray = text.match(/\S+/g); /* '\S: matching anything except a whitespace
       (newline, tab, space) - "\S" is the negation of \s*/
 
@@ -42,80 +60,6 @@ export class StringHandlingService {
     }
   }
 
-  /** Returns a concatenated string, of the passed list of strings, separated by a comma then space
-   * @param {Array} listOfStrings - a list of strings to concat
-   * @returns {String} a string of all strings in the list concatinated and seperated by a comma then space
-   * in the format "string 1, string 2, ..., string n". If list is empty, an empty string is returned.
-   */
-  concatListAndSeparateByCommas(listOfStrings: string[]): string {
-    const commaThenSpace = ", ";
-    let concatinatedString = "";
-
-    // process all string in list and concatinate them
-    for (let i = 0; i < listOfStrings.length; i++) {
-      // if its the beginning, do not add the comma
-      if (i === 0) {
-        concatinatedString = concatinatedString.concat(listOfStrings[i]);
-      } else { // if its not the first string, prefix it with ", "
-        concatinatedString = concatinatedString.concat(commaThenSpace.concat(listOfStrings[i]));
-      }
-    }
-
-    return concatinatedString;
-  }
-
-  /** Escapes all of the special characters, used in regular expression logic,
-   * that exist in the passed string so when the string is used in a regular
-   * expression, those characters will be treated as a part of the string rather
-   * than a special character for the regEx logic
-   * @param {String} regExpString - the regular expression as string
-   * @returns {String} the passed string where all of the special characters
-   *  of regular expressions are escaped, if any.
-   */
-  escapeSpecialCharactersOfRegExpInAString(regExpString: string): string {
-    /*
-    []: matches any one of the characters in the brackets
-    |: OR
-    */
-    return regExpString.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
-  }
-
-  /** Replaces the escaped XML characters in a string, if any,
-   * with the corresponding non-escaped characters
-   * @param {String} text - the text to proccess
-   * @returns {String} the string where all escaped XML characters are replaced
-   * by the corresponding non-escaped character.
-   */
-  replaceEscapedXMLCharactersWithNonEscapedCharacters(text: string) {
-    text = text
-      .replace(/&quot;/g, "\"") // g for global match (to not stop at first match)
-      .replace(/&apos;/g, "\'") // g for global match (to not stop at first match)
-      .replace(/&lt;/g, "<") // g for global match (to not stop at first match)
-      .replace(/&amp;/g, "&") // g for global match (to not stop at first match)
-      .replace(/&gt;/g, ">"); // g for global match (to not stop at first match)
-
-    return text;
-  }
-
-  /** Determines whether a list of string contain a particular string
-   * @param {Array} list - the list to search in
-   * @param {String} value - the value to search for in list
-   * @returns {Boolean} true if the passed list contains the string value and false otherwise
-   */
-  includes(list: string[], value: string): boolean {
-    // Note: cannot use built in function "includes" as its not supported by IE
-
-    // traverse all list items
-    for (let i = 0; i < list.length; i++) {
-      // if any element matches the passed value, return true
-      if (list[i] === value) {
-        return true;
-      }
-    }
-    // if no element matches the passed value, return false
-    return false;
-  }
-
   /** Returns the first and last word in a string
    * @param {String} text - string to test
    * @returns {String} the first and last word of the string, if string is not white space only.
@@ -124,13 +68,13 @@ export class StringHandlingService {
    */
   getFirstAndLastWord(text: string): string {
     if (!this.isWhiteSpaceOnly(text)) {
-      // create a list of all words in text,
-      const stringBrokenIntoArray = text.match(/\S+/g); /* '\S: matching anything except a whitespace 
+      // create a list of all words in text using any white space as a breaking point
+      const stringBrokenIntoArray = text.match(/\S+/g); /* '\S: matching anything except a whitespace
       (newline, tab, space) - is the negation of \s*/
 
       let stringToReturn = stringBrokenIntoArray[0];
 
-      // if string contains more than word, add the last one
+      // if string contains more than one word, append the last word to the string to return
       if (stringBrokenIntoArray.length > 1) {
         stringToReturn = stringToReturn + " " + stringBrokenIntoArray[stringBrokenIntoArray.length - 1];
       }
@@ -165,20 +109,6 @@ export class StringHandlingService {
     } else {
       return "";
     }
-  }
-
-  /** Determines if the passed string contains the second passed string as a prefix
-   * @param {String} text - the string to check if prefix is in it
-   * @param {String} possiblePrefix - the possible prefix of text
-   * @returns {Boolean} true if the passed string contains the second passed
-   * string as a prefix and false otherwise.
-   */
-  isPrefix(text: string, possiblePrefix: string): boolean {
-    if (text.length < possiblePrefix.length) {
-      return false;
-    }
-
-    return text.includes(possiblePrefix) && text.substring(0, possiblePrefix.length) === possiblePrefix;
   }
 
   /** Extracts the path from the passed URL & returns it
@@ -225,6 +155,41 @@ export class StringHandlingService {
     }
   }
 
+  /** Determines whether a list of strings contain a particular string
+   * @param {Array} list - the list to search in
+   * @param {String} value - the value to search for in list
+   * @returns {Boolean} true if the passed list contains the string value and false otherwise
+   */
+  includes(list: string[], value: string): boolean {
+    // Note: cannot use built in function "includes" as its not supported by IE
+
+    // traverse all list items
+    for (let i = 0; i < list.length; i++) {
+      // if any element matches the passed value, return true
+      if (list[i] === value) {
+        return true;
+      }
+    }
+    // if no element matches the passed value, return false
+    return false;
+  }
+
+  /** Returns whether the passed text contains at least one arabic character or not
+   * @param {String} text - the text to test
+   * @returns {Boolean} Returns whether the passed text containts at least one Arabic
+   * character
+   */
+  hasAnArabicCharacter(text: string): boolean {
+    // Define the arabic char unicode range: u0600-\u06FF as a regular expression
+    const arabicCharUnicodeRange = /[\u0600-\u06FF]/;
+    // Brackets: matches any one of the characters in the brackets
+    // -: defines a range (period)
+    // \u: Matches the character with the Unicode value hhhh (hexadecimal digits)
+
+    // Return whether at least one of the text string's characters match the regular expression
+    return arabicCharUnicodeRange.test(text);
+  }
+
   /** Returns the HTTPS version of the URL
    * @param {String} url - the URL to process
    * @returns {String} the HTTPS version of a URL if the string is not whitespace only.
@@ -234,7 +199,7 @@ export class StringHandlingService {
   getHttpsVersionOfURL(url: string): string {
     if (!this.isWhiteSpaceOnly(url)) {
       // CASE 1: If the url doesn't have a protocol or have a different protocol than HTTP/HTTPS
-      if (!url.includes("http")) { // TODO: replace includes with a custom function as it's not supported in IE
+      if (url.indexOf("http") === -1) { // Note: not  using the built in function includes() as it's not supported in IE
         return url;
       }
       // CASE 2: If the protocol contains an HTTP/HTTPS protocol
@@ -244,4 +209,92 @@ export class StringHandlingService {
     }
   }
 
+  /** Returns a concatenated string, of the passed list of strings, separated by a comma then space
+   * @param {Array} listOfStrings - a list of strings to concat
+   * @returns {String} a string of all strings in the list concatinated and seperated by a comma then space
+   * in the format "string 1, string 2, ..., string n". If list is empty, an empty string is returned.
+   */
+  concatListAndSeparateByCommas(listOfStrings: string[]): string {
+    const commaThenSpace = ", ";
+    let concatinatedString = "";
+
+    // process all string in list and concatinate them
+    for (let i = 0; i < listOfStrings.length; i++) {
+      // if its the beginning, do not add the comma
+      if (i === 0) {
+        concatinatedString = concatinatedString.concat(listOfStrings[i]);
+      } else { // if its not the first string, prefix it with ", "
+        concatinatedString = concatinatedString.concat(commaThenSpace.concat(listOfStrings[i]));
+      }
+    }
+
+    return concatinatedString;
+  }
+
+  /** Replaces the escaped XML characters in a string, if any,
+   * with the corresponding non-escaped characters
+   * @param {String} text - the text to proccess
+   * @returns {String} the string where all escaped XML characters are replaced
+   * by the corresponding non-escaped character.
+   */
+  replaceEscapedXMLCharactersWithNonEscapedCharacters(text: string) {
+    text = text
+      .replace(/&quot;/g, "\"") // g for global match (to not stop at first match)
+      .replace(/&apos;/g, "\'") // g for global match (to not stop at first match)
+      .replace(/&lt;/g, "<") // g for global match (to not stop at first match)
+      .replace(/&amp;/g, "&") // g for global match (to not stop at first match)
+      .replace(/&gt;/g, ">"); // g for global match (to not stop at first match)
+
+    return text;
+  }
+
+  /** Escapes all of the special characters, used in regular expression logic,
+   * that exist in the passed string so when the string is used in a regular
+   * expression, those characters will be treated as a part of the string rather
+   * than a special character for the regEx logic
+   * @param {String} regExpString - the regular expression as string
+   * @returns {String} the passed string where all of the special characters
+   *  of regular expressions are escaped, if any.
+   */
+  escapeSpecialCharactersOfRegExpInAString(regExpString: string): string {
+    /*
+    []: matches any one of the characters in the brackets
+    |: OR
+    */
+    return regExpString.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); // $& means the whole matched string
+  }
+
+  /** Replaces white spaces, new lines, invalid URL characters and the symbols "'<>&[!@#$%^*(),?":{}|<>]
+   *  with an underscore"
+   * @param {String} text - the string to handle
+   * @returns {String} Returns the string after replacing the special
+   * characters with underscore
+   */
+  replaceSpecialCharactersWithUnderscore(text: string): string {
+
+    const symbol = "_";
+
+    return this
+      .replaceNonValidURLCharsWithSymbol(text, symbol) // replace non valid URL chars
+      .replace(/[\s\n'"<>&\!\@#\$%\^\*\|\(\)\,\?\:\{\}\[\]]/g, symbol); // Replace additional special characters with
+    // an underscore as well (if they still exist after URL): white space, new line, "'<>&[!@#$%^*(),?":{}|<>]
+
+    /* Note special characters in regular expressions has to be escaped them with
+     *  a \ to indicate I wanted a literal character. */
+  }
+
+  /** Replaces non-valid URL charatcers existing in the passed text with
+   *  the passed symbol
+   * @param {String} text - the string to handle
+   * @returns {String} Returns the string after replacing any non-valid
+   * URL characters with the passed symbol
+   */
+  replaceNonValidURLCharsWithSymbol(text: string, symbol: string): string {
+
+    // Replace any non-valid URL character with an underscore
+    return text.replace(/[^a-zA-Z0-9-\._~\:\/\?#\[\]\@\!\$\&'\(\)\*\+\,\;\=]/g, symbol);
+
+    // ^ in a char set: A negated or complemented character set. That is, it matches anything that is not enclosed in the brackets
+    // None valid char list: ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=
+  }
 }
