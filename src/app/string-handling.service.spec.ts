@@ -118,20 +118,29 @@ describe('StringHandlingService', () => {
     expect(stringHandlingService.extractPathFromURL("    ")).toBe("");
   });
 
-  // ----------- includes() Unit Tests -----------
+  // ----------- isIncludedInString() Unit Tests -----------
+  it("should return true when checking if 'Pacific' is included in the string 'The Pacific Ocean'", () => {
+    expect(stringHandlingService.isIncludedInString("The Pacific Ocean", "Pacific")).toBe(true);
+  });
 
-  it('should return true when checking if [\'cat\'] is included in the string list [\'cat\', \'dog\']', () => {
+  it("should return false when checking if 'Pacific' is included in the string 'The Indian Ocean'", () => {
+    expect(stringHandlingService.isIncludedInString("The Indian Ocean", "Pacific")).toBe(false);
+  });
+
+  // ----------- isIncludedInStringList() Unit Tests -----------
+
+  it("should return true when checking if ['cat'] is included in the string list ['cat', 'dog']", () => {
 
     const animals = ['cat', 'dog'];
 
-    expect(stringHandlingService.includes(animals, 'cat')).toBe(true);
+    expect(stringHandlingService.isIncludedInStringList(animals, 'cat')).toBe(true);
   });
 
   it('should return false when checking if [\'bird\'] is included in the string list [\'cat\', \'dog\']', () => {
 
     const animals = ['cat', 'dog'];
 
-    expect(stringHandlingService.includes(animals, 'bird')).toBe(false);
+    expect(stringHandlingService.isIncludedInStringList(animals, 'bird')).toBe(false);
   });
 
 

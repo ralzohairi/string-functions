@@ -155,13 +155,23 @@ export class StringHandlingService {
     }
   }
 
+  /** Determines whether a string includes another string within it
+   * @param {String} string1 - the string to test whether it includes string2
+   * @param {String} string2 - the string to test whether it's included in string1
+   * @returns {Boolean} true if string2 is included in string 1 and false otherwise
+   */
+  isIncludedInString(string1: string, string2: string): boolean {
+    // Note: cannot use built in string function "includes" as its not supported by IE
+    return string1.indexOf(string2) !== -1;
+  }
+
   /** Determines whether a list of strings contain a particular string
    * @param {Array} list - the list to search in
    * @param {String} value - the value to search for in list
    * @returns {Boolean} true if the passed list contains the string value and false otherwise
    */
-  includes(list: string[], value: string): boolean {
-    // Note: cannot use built in function "includes" as its not supported by IE
+  isIncludedInStringList(list: string[], value: string): boolean {
+    // Note: cannot use built in array function "includes" as its not supported by IE
 
     // traverse all list items
     for (let i = 0; i < list.length; i++) {
