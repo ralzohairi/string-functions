@@ -1,6 +1,6 @@
 # String Functions
 
-This project provides user-defined TypeScript functions for handling and manipulting strings in an Angular project and it was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.2.
+This project provides user-defined TypeScript functions for handling and manipulating strings in an Angular project and it was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.2.
 
 ## Development server
 
