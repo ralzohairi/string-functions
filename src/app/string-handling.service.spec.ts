@@ -232,12 +232,24 @@ describe('StringHandlingService', () => {
     expect(stringHandlingService.getHttpsVersionOfURL("http://github.com/")).toBe("https://github.com/");
   });
 
+  it("should return 'https://github.com/' when passing 'hTtP://GITHUB.com/' to the getHttpsVersionOfURL function", () => {
+    expect(stringHandlingService.getHttpsVersionOfURL("hTtP://GITHUB.com/")).toBe("https://github.com/");
+  });
+
   it("should return 'https://github.com/' when passing 'https://github.com/' to the getHttpsVersionOfURL function", () => {
     expect(stringHandlingService.getHttpsVersionOfURL("https://github.com/")).toBe("https://github.com/");
   });
 
+  it("should return 'https://github.com/' when passing 'HTTPS://GITHUB.com/' to the getHttpsVersionOfURL function", () => {
+    expect(stringHandlingService.getHttpsVersionOfURL("HTTPS://GITHUB.com/")).toBe("https://github.com/");
+  });
+
   it("should return 'github.com/' when passing 'github.com/' to the getHttpsVersionOfURL function (no protocol case)", () => {
     expect(stringHandlingService.getHttpsVersionOfURL("github.com/")).toBe("github.com/");
+  });
+
+  it("should return 'github.com/' when passing 'GITHUB.com/' to the getHttpsVersionOfURL function (no protocol case)", () => {
+    expect(stringHandlingService.getHttpsVersionOfURL("GITHUB.com/")).toBe("github.com/");
   });
 
   it("should return an empty string when passing only whitespace to the getHttpsVersionOfURL function", () => {

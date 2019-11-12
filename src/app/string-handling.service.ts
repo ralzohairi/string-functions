@@ -208,9 +208,11 @@ export class StringHandlingService {
    */
   getHttpsVersionOfURL(url: string): string {
     if (!this.isWhiteSpaceOnly(url)) {
+      url = url.toLowerCase();
+
       // CASE 1: If the url doesn't have a protocol or have a different protocol than HTTP/HTTPS
       if (!this.isIncludedInString(url, "http")) { // Note: not  using the built in function includes() as it's not supported in IE
-        return url;
+        return url.toLowerCase();
       }
       // CASE 2: If the protocol contains an HTTP/HTTPS protocol
       return this.isPrefix(url, "https") ? url : url.replace("http", "https"); // replace replace first occurance only
