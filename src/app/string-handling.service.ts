@@ -239,11 +239,12 @@ export class StringHandlingService {
    */
   replaceEscapedXMLCharactersWithNonEscapedCharacters(text: string) {
     text = text
-      .replace(/&quot;/g, "\"") // g for global match (to not stop at first match)
-      .replace(/&apos;/g, "\'") // g for global match (to not stop at first match)
-      .replace(/&lt;/g, "<") // g for global match (to not stop at first match)
-      .replace(/&amp;/g, "&") // g for global match (to not stop at first match)
-      .replace(/&gt;/g, ">"); // g for global match (to not stop at first match)
+      .replace(/&quot;/g, "\"")
+      .replace(/&apos;/g, "\'")
+      .replace(/&lt;/g, "<")
+      .replace(/&amp;/g, "&")
+      .replace(/&gt;/g, ">");
+    // g for global match (to not stop at first match)
 
     return text;
   }

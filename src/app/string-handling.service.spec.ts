@@ -272,6 +272,11 @@ describe('StringHandlingService', () => {
       .toBe("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~_/____________+_;=____");
   });
 
+  it("should return string as is when it has no invalid URL chars and no forbidden characters to replaceSpecialCharactersWithUnderscore", () => {
+    expect(stringHandlingService.replaceSpecialCharactersWithUnderscore("ab")).toBe("ab");
+    expect(stringHandlingService.replaceSpecialCharactersWithUnderscore("")).toBe("");
+  });
+
   // ----------- replaceNonValidURLCharsWithSymbol() Unit Tests -----------
   it("should replace non valid URL chars with underscore when passing 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;={}|^' to replaceNonValidURLCharsWithSymbol", () => {
     expect(stringHandlingService.replaceNonValidURLCharsWithSymbol("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;={}|^", "_"))
