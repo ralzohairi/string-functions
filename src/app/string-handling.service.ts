@@ -211,11 +211,11 @@ export class StringHandlingService {
 
   /** Returns a concatenated string, of the passed list of strings, separated by the passed symbol
    * @param {Array} listOfStrings - a list of strings to concat
-   * @param {String} symbol - the symbol to use as a seperator i.e. ", "
+   * @param {String} seperatorSymbol - the symbol to use as a seperator i.e. ", "
    * @returns {String} a string of all strings in the list concatinated and seperated by the passed symbol
    * in the format "string 1(symbol)string 2(symbol)...(symbol)string n". If list is empty, an empty string is returned.
    */
-  concatListAndSeparateBySymbol(listOfStrings: string[], symbol: string): string {
+  concatListAndSeparateBySymbol(listOfStrings: string[], seperatorSymbol: string): string {
     let concatinatedString = "";
 
     // process all string in list and concatinate them
@@ -224,7 +224,7 @@ export class StringHandlingService {
       if (i === 0) {
         concatinatedString = concatinatedString.concat(listOfStrings[i]);
       } else { // if its not the first string, prefix it with the passed symbol
-        concatinatedString = concatinatedString.concat(symbol.concat(listOfStrings[i]));
+        concatinatedString = concatinatedString.concat(seperatorSymbol.concat(listOfStrings[i]));
       }
     }
 
