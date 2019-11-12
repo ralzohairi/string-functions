@@ -209,22 +209,22 @@ export class StringHandlingService {
     }
   }
 
-  /** Returns a concatenated string, of the passed list of strings, separated by a comma then space
+  /** Returns a concatenated string, of the passed list of strings, separated by the passed symbol
    * @param {Array} listOfStrings - a list of strings to concat
-   * @returns {String} a string of all strings in the list concatinated and seperated by a comma then space
-   * in the format "string 1, string 2, ..., string n". If list is empty, an empty string is returned.
+   * @param {String} symbol - the symbol to use as a seperator i.e. ", "
+   * @returns {String} a string of all strings in the list concatinated and seperated by the passed symbol
+   * in the format "string 1(symbol)string 2(symbol)...(symbol)string n". If list is empty, an empty string is returned.
    */
-  concatListAndSeparateByCommas(listOfStrings: string[]): string {
-    const commaThenSpace = ", ";
+  concatListAndSeparateBySymbol(listOfStrings: string[], symbol: string): string {
     let concatinatedString = "";
 
     // process all string in list and concatinate them
     for (let i = 0; i < listOfStrings.length; i++) {
-      // if its the beginning, do not add the comma
+      // if its the beginning, do not add the symbol
       if (i === 0) {
         concatinatedString = concatinatedString.concat(listOfStrings[i]);
-      } else { // if its not the first string, prefix it with ", "
-        concatinatedString = concatinatedString.concat(commaThenSpace.concat(listOfStrings[i]));
+      } else { // if its not the first string, prefix it with the passed symbol
+        concatinatedString = concatinatedString.concat(symbol.concat(listOfStrings[i]));
       }
     }
 

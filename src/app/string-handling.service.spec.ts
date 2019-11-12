@@ -235,11 +235,11 @@ describe('StringHandlingService', () => {
     expect(stringHandlingService.getHttpsVersionOfURL("     ")).toBe("");
   });
 
-  // ----------- concatListAndSeparateByCommas() Unit Tests -----------
+  // ----------- concatListAndSeparateBySymbol() Unit Tests -----------
 
   it('should return passed string list in the format \'string1, string2, ..., stringn\'', () => {
     const listOfCars = ['Toyota', 'GMC', 'BMW'];
-    expect(stringHandlingService.concatListAndSeparateByCommas(listOfCars)).toEqual('Toyota, GMC, BMW');
+    expect(stringHandlingService.concatListAndSeparateBySymbol(listOfCars, ", ")).toEqual('Toyota, GMC, BMW');
   });
 
   // ----------- replaceEscapedXMLCharactersWithNonEscapedCharacters() Unit Tests -----------
