@@ -22,10 +22,12 @@ describe('StringHandlingService', () => {
 
   it('should return false when passing a string that is not white space only & checking if its white space only', () => {
     expect(stringHandlingService.isWhiteSpaceOnly('hello everybody!')).toBe(false);
+    expect(stringHandlingService.isWhiteSpaceOnly(" Hello World ")).toBe(false);
   });
 
   it('should return true when passing a string that is white space only & checking if its white space only', () => {
     expect(stringHandlingService.isWhiteSpaceOnly('       ')).toBe(true);
+    expect(stringHandlingService.isWhiteSpaceOnly(' ')).toBe(true);
   });
 
   // ----------- isPrefix() Unit Tests -----------
@@ -34,8 +36,8 @@ describe('StringHandlingService', () => {
     expect(stringHandlingService.isPrefix("image/png", "image/")).toBe(true);
   });
 
-  it("should return false when passing the text '\"document/image/png\"' with a possible prefix as '\"image/\"' to the isPrefix function", () => {
-    expect(stringHandlingService.isPrefix("document/image/png", "image/")).toBe(false);
+  it("should return false when passing the text '\"xxx/image/png\"' with a possible prefix as '\"image/\"' to the isPrefix function", () => {
+    expect(stringHandlingService.isPrefix("xxx/image/png", "image/")).toBe(false);
   });
 
   it("should return true when passing the text '\"https\\x\\x\"' with a possible prefix as '\"https/\"' to the isPrefix function", () => {
@@ -54,6 +56,7 @@ describe('StringHandlingService', () => {
 
   it('should return first word of string when requesting first word and passing a non-empty string', () => {
     expect(stringHandlingService.getFirstWord('   Ahmed    Saleh Algamdi')).toBe('Ahmed');
+    expect(stringHandlingService.getFirstWord(' Muhammad Ali ')).toBe('Muhammad');
   });
 
   it('should return empty string when requesting first word but passing an empty string', () => {
@@ -63,6 +66,7 @@ describe('StringHandlingService', () => {
   // ----------- getFirstAndLastWord() Unit Tests -----------
   it('should return first and last of string when requesting first word and last word and passing a non-empty string', () => {
     expect(stringHandlingService.getFirstAndLastWord('   Ahmed    Saleh Aymen Raed Algamdi')).toBe('Ahmed Algamdi');
+    expect(stringHandlingService.getFirstAndLastWord(' Nelson Rolihlahla Mandela ')).toBe('Nelson Mandela');
   });
 
   it('should return empty string when requesting first word and last word but passing an empty string', () => {
@@ -73,6 +77,10 @@ describe('StringHandlingService', () => {
 
   it("should return '\"file.name-file.name\"' when passing '\"file.name-file.name.png\"' to the removeFileNameExtension from filename", () => {
     expect(stringHandlingService.removeFileNameExtension("file.name-file.name.png")).toBe("file.name-file.name");
+  });
+
+  it("should return \"my_cv\" when passing \"my_cv.pdf\" to the removeFileNameExtension from filename", () => {
+    expect(stringHandlingService.removeFileNameExtension("my_cv.pdf")).toBe("my_cv");
   });
 
   it("should return the passed string when passing a filename without extension to the removeFileNameExtension from filename", () => {
@@ -217,6 +225,7 @@ describe('StringHandlingService', () => {
     expect(stringHandlingService.hasAnArabicCharacter("9أ")).toBe(true);
     expect(stringHandlingService.hasAnArabicCharacter("9،")).toBe(true);
     expect(stringHandlingService.hasAnArabicCharacter("aZأ")).toBe(true);
+    expect(stringHandlingService.hasAnArabicCharacter("language: العربية")).toBe(true);
   });
 
   it("should return false when passing text that has no Arabic character to the hasAnArabicCharacter function", () => {
@@ -263,14 +272,18 @@ describe('StringHandlingService', () => {
   // ----------- concatListAndSeparateBySymbol() Unit Tests -----------
 
   it('should return passed string list in the format \'string1, string2, ..., stringn\'', () => {
-    const listOfCars = ['Toyota', 'GMC', 'BMW'];
-    expect(stringHandlingService.concatListAndSeparateBySymbol(listOfCars, ", ")).toEqual('Toyota, GMC, BMW');
+    const listOfCars = ["You", "Daniel", "John"];
+    expect(stringHandlingService.concatListAndSeparateBySymbol(listOfCars, ", ")).toEqual('You, Daniel, John');
   });
 
   // ----------- replaceEscapedXMLCharactersWithNonEscapedCharacters() Unit Tests -----------
 
   it("should return \"The ocean's blue < & > \" when passing '&quot; The ocean&apos;s blue &lt; &amp; &gt; &quot;'", () => {
     expect(stringHandlingService.replaceEscapedXMLCharactersWithNonEscapedCharacters("&quot; The ocean&apos;s blue &lt; &amp; &gt; &quot;")).toBe("\" The ocean's blue < & > \"");
+  });
+
+  it("should return 'Bath & Body Works' when passing 'Bath &quot; Body Works'", () => {
+    expect(stringHandlingService.replaceEscapedXMLCharactersWithNonEscapedCharacters("Bath &amp; Body Works")).toBe("Bath & Body Works");
   });
 
   it("should return the same string if a string of whitespace only is passed to replaceEscapedXMLCharactersWithNonEscapedCharacters()", () => {
@@ -282,9 +295,17 @@ describe('StringHandlingService', () => {
     expect(stringHandlingService.escapeSpecialCharactersOfRegExpInAString('.*+?^${}()\\ \\\\ \'')).toEqual('\\.\\*\\+\\?\\^\\$\\{\\}\\(\\)\\\\ \\\\\\\\ \'');
   });
 
+  it("should escape the regular expression 'How are you?' and return 'How are you\\?'", () => {
+    expect(stringHandlingService.escapeSpecialCharactersOfRegExpInAString("How are you?")).toEqual('How are you\\?');
+  });
+
   // ----------- replaceSpecialCharactersWithUnderscore() Unit Tests -----------
   it("should replace all special characters '\\s\\n\"'<>&' to undersocre when passing '     \n\n\"'<>&' to replaceSpecialCharactersWithUnderscore", () => {
     expect(stringHandlingService.replaceSpecialCharactersWithUnderscore("     \n\n\"'<>&")).toBe("____________");
+  });
+
+  it("should replace all special characters to underscore when passing ' my<>cv.pdf' to replaceSpecialCharactersWithUnderscore", () => {
+    expect(stringHandlingService.replaceSpecialCharactersWithUnderscore(" my<>cv.pdf")).toBe("_my__cv.pdf");
   });
 
   it("should replace all extra forbidden characters to underscore when passing ' \n'\"<>&!@#$%^*|(),?:{}[]' to replaceSpecialCharactersWithUnderscore", () => {
@@ -306,5 +327,10 @@ describe('StringHandlingService', () => {
   it("should replace non valid URL chars with underscore when passing 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;={}|^' to replaceNonValidURLCharsWithSymbol", () => {
     expect(stringHandlingService.replaceNonValidURLCharsWithSymbol("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;={}|^", "_"))
       .toBe("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~:/?#[]@!$&'()*+,;=____");
+  });
+
+  it("should replace non valid URL chars with underscore when passing ' project|1.pdf' to replaceNonValidURLCharsWithSymbol", () => {
+    expect(stringHandlingService.replaceNonValidURLCharsWithSymbol(" project|1.pdf", "_"))
+      .toBe("_project_1.pdf");
   });
 });
