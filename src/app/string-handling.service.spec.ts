@@ -46,6 +46,10 @@ describe('StringHandlingService', () => {
     expect(stringHandlingService.isPrefix("  http\\x\\x", "https")).toBe(false);
   });
 
+  it("should return false when passing the text \"image/png\" with a possible prefix as '\"IMAGE/\"' to the isPrefix function as it's case sensitive", () => {
+    expect(stringHandlingService.isPrefix("image/png", "IMAGE/")).toBe(false);
+  });
+
   // ----------- getFirstWord() Unit Tests -----------
 
   it('should return first word of string when requesting first word and passing a non-empty string', () => {
