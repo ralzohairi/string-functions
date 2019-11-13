@@ -2,6 +2,9 @@
 
 This project provides user-defined TypeScript functions for handling and manipulating strings in an Angular project and it was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.1.2.
 
+## Where to find the functions in the Angular project?
+All the functions are in the `string-handling.service.ts` found in the path `src/app`.
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
